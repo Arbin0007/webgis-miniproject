@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Lumbini Province"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.5, 27.0],
+          [84.5, 27.0],
+          [84.5, 29.0],
+          [80.5, 29.0],
+          [80.5, 27.0]
+        ]]
+      }
+    }
+  ]
+}

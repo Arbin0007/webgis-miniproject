@@ -1,0 +1,244 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Maya Devi Temple",
+        "type": "Religious",
+        "district": "Rupandehi",
+        "info": "Sacred birthplace of Lord Buddha, central site of Lumbini.",
+        "image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgumzqiYzoG-Ion7tvYRbXzbcUMIp9FyH2_tQDTWIzbRCYnQ-9VdnnSypRGN6WnPXuaXdPLRk-76Rpw2_fgxLemF123ltQ8gUq3xn_SvrrgujsLT49H5fdGwIF517LQoXa1lQIih_FsbFI/s1600/lumbini5+%281%29.jpg"
+      },
+      "geometry": { "type": "Point", "coordinates": [83.2755, 27.4712] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "World Peace Pagoda",
+        "type": "Religious",
+        "district": "Rupandehi",
+        "info": "Japanese-built white pagoda representing peace and unity.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/0/08/World_Peace_Pagoda_Lumbini%2C_Nepal.jpg"
+      },
+      "geometry": { "type": "Point", "coordinates": [83.2771, 27.4684] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ashoka Pillar",
+        "type": "Historical",
+        "district": "Rupandehi",
+        "info": "Erected by Emperor Ashoka in 249 BC marking Buddha's birthplace.",
+        "image": "https://th.bing.com/th/id/R.b4a992d34dd71ca9af96120a9641adb8?rik=m4JB13k4TpcOgg&pid=ImgRaw&r=0"
+      },
+      "geometry": { "type": "Point", "coordinates": [83.2768, 27.4709] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tilaurakot",
+        "type": "Archaeological",
+        "district": "Kapilvastu",
+        "info": "Ruins of ancient Kapilvastu where Buddha spent early years.",
+        "image": "https://tse2.mm.bing.net/th/id/OIP.BPZp8ssizes_B2AgA-G81AHaHa?w=600&h=600&rs=1&pid=ImgDetMain&o=7&rm=3"
+      },
+      "geometry": { "type": "Point", "coordinates": [83.1590, 27.5581] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ramagrama Stupa",
+        "type": "Historical",
+        "district": "Parasi",
+        "info": "Only stupa containing the relics of Buddha, not opened yet.",
+        "image": "https://tse3.mm.bing.net/th/id/OIP.DY1AwBdBo_QJcSq4PleITwHaI5?rs=1&pid=ImgDetMain&o=7&rm=3"
+      },
+      "geometry": { "type": "Point", "coordinates": [83.6628, 27.6407] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Jaljala Temple",
+        "type": "Religious",
+        "district": "Rolpa",
+        "info": "A high-altitude religious site with panoramic views and deep spiritual significance.",
+        "image": "https://tse4.mm.bing.net/th/id/OIP.NoYhO6SNjzCvED9LT2K_2AHaEw?w=937&h=601&rs=1&pid=ImgDetMain&o=7&rm=3"
+      },
+      "geometry": { "type": "Point", "coordinates": [82.7321, 28.0256] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Rani Mahal",
+        "type": "Historical",
+        "district": "Palpa",
+        "info": "The 'Taj Mahal of Nepal', a riverside palace built in memory of a queen.",
+        "image": "https://tse4.mm.bing.net/th/id/OIP.q3B1op2mXyRgj7tTVDadrQHaEq?rs=1&pid=ImgDetMain&o=7&rm=3"
+      },
+      "geometry": { "type": "Point", "coordinates": [83.5515, 27.8420] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ridi Bazaar",
+        "type": "Cultural",
+        "district": "Gulmi",
+        "info": "A sacred pilgrimage site located at the confluence of the Ridi Khola and Kaligandaki river.",
+        "image": "https://i.ytimg.com/vi/B9MOOGWZ8mI/maxresdefault.jpg"
+      },
+      "geometry": { "type": "Point", "coordinates": [83.2131, 27.8824] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bageshwori Temple",
+        "type": "Religious",
+        "district": "Banke",
+        "info": "A historic temple dedicated to Goddess Bageshwori, major pilgrimage center.",
+        "image": "https://ktmguide.com/wp-content/uploads/2021/09/bageshwor4.jpg"
+      },
+      "geometry": { "type": "Point", "coordinates": [81.6353, 28.0500] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tharu Cultural Museum",
+        "type": "Cultural",
+        "district": "Bardiya",
+        "info": "Showcases Tharu culture and traditions in the Bardiya district.",
+        "image": "https://asianheritagetreks.com/wp-content/uploads/2023/06/tharu-homestays-chitwan-national-park.jpg"
+      },
+      "geometry": { "type": "Point", "coordinates": [81.3321, 28.2612] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bardia National Park",
+        "type": "Natural",
+        "district": "Bardiya",
+        "info": "Popular for wildlife like tigers, elephants, and rhinoceros.",
+        "image": "https://asianheritagetreks.com/wp-content/uploads/2017/01/bardiya-national-park.jpg"
+      },
+      "geometry": { "type": "Point", "coordinates": [81.3345, 28.3333] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gajedi Taal",
+        "type": "Lake",
+        "district": "Rupandehi",
+        "info": "Scenic lake surrounded by forests, popular picnic and boating spot.",
+        "image": "https://i.ytimg.com/vi/be6rgUP6Z6A/maxresdefault.jpg"
+      },
+      "geometry": { "type": "Point", "coordinates": [83.3361, 27.5764] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Satyavati Lake",
+        "type": "Lake",
+        "district": "Palpa",
+        "info": "A sacred lake with legends of wish fulfillment, Hindu pilgrimage site.",
+        "image": "https://i.ytimg.com/vi/NlH7u6fap50/maxresdefault.jpg"
+      },
+      "geometry": { "type": "Point", "coordinates": [83.5664, 27.8449] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Badimalika TikTok Viewpoint",
+        "type": "Trending",
+        "district": "Dang",
+        "info": "Popular among youths and TikTok creators for mountain views.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Viewpoint_Dang_Nepal.jpg"
+      },
+      "geometry": { "type": "Point", "coordinates": [82.3401, 27.9150] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Jakhera Lake",
+        "type": "Lake",
+        "district": "Dang",
+        "info":"A man-made lake for irrigation and popular for picnic purpose",
+        "image_source": "https://tourismpana.com/wp-content/uploads/2022/12/Jakhera-lake-dang-1024x684.jpg"
+      },
+      "geometry": {
+        "type": "Point",
+        "district": "Dang",
+        "coordinates": [82.57333, 27.87528]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dharapani Temple",
+        "type": "Temple",
+        "district": "Dang",
+        "info":"A place where shivaji lives",
+        "image_source": "https://imagepasal.com/watermark/Dharapani-Temple-Worlds-Tallest-Trishul-image-pasal-2024-01-20.jpg"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [82.4861, 28.0408]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Purandhara Waterfall",
+        "type": "Waterfall",
+        "district": "Dang",
+        "info":"Popular waterfall at the end of dang district",
+        "image_source": "https://tse4.mm.bing.net/th/id/OIP.kg3pPdsl4JV_Sz4cBx5F-QHaDz?rs=1&pid=ImgDetMain&o=7&rm=3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [82.0188, 28.197]
+      }
+    },
+     {
+      "type": "Feature",
+      "properties": {
+        "name": "Shree SupaDeurali Mandir",
+        "type": "Religious",
+        "district": "Arghakhanchi",
+        "info":"Supa Deurali Mandir is a Hindu temple dedicated to Devi, located at 4,500 feet altitude in Sandhikharka municipality of Arghakhanchi district, Nepal, and is one of the famous pilgrimage sites of western Nepal surrounded by magnificent hill",
+        "image_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Supa_Deurali_Temple_in_Sandhikharka%2C_Arghakhanchi.jpg/500px-Supa_Deurali_Temple_in_Sandhikharka%2C_Arghakhanchi.jpg"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [83.1363021865077,27.900186813845057]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Swargadwari Mandir",
+        "type": "Religious",
+        "district": "Pyuthan",
+        "info":"Swargadwari is a hilltop temple and pilgrimage site in Pyuthan District, Nepal, commemorating the special role of cows in Hinduism.",
+        "image_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Swargadwari_temple.jpg/500px-Swargadwari_temple.jpg"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [82.67161687445562,28.137505850749942]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Triveni Dham",
+        "type": "Religious",
+        "district": "Nawalparasi East",
+        "info":"Triveni Dham is a famous pilgrimage site in Nawalparasi at the confluence of three rivers; Narayani (Gandaki), Sona and Tamasa Rivers. This holy pilgrimage site is sacred as it is depicted in many holy books of Varaha, Himavat and the Skanda Puranas and mentioned in many plays and drama of Kalidas.",
+        "image_source": "https://www.alpineholidaysnepal.com/blog/wp-content/uploads/2021/02/Devotees-9-1024x586.jpg"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [82.48553504454826,28.0743497778617]
+      }
+    }
+  ]
+}

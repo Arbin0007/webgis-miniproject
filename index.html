@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🇳🇵 Lumbini Province Tourist Explorer</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      height: 100vh;
+      background-color: #f0f4f8;
+      color: #000000;
+    }
+    #sidebar {
+      width: 300px;
+      background-color: #ffffff;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+    }
+    #sidebar h3, #sidebar h4 {
+      margin-top: 0;
+      color: #d62828;
+    }
+    #sidebar select, #sidebar button, #bufferRadius {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    #placeList {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    #placeList li {
+      background: linear-gradient(90deg, #f8f6ff 0%, #e0c3fc 100%);
+      border-radius: 10px;
+      box-shadow: 0 1px 6px rgba(122, 85, 255, 0.07);
+      padding: 12px 16px;
+      color: #3a2e6c;
+      font-size: 15px;
+      font-weight: 500;
+      border: 1.5px solid #e0c3fc;
+      cursor: pointer;
+      transition: background 0.18s, box-shadow 0.18s, border 0.18s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #placeList li:hover {
+      background: linear-gradient(90deg, #e0c3fc 0%, #f3e8ff 100%);
+      box-shadow: 0 2px 10px rgba(122, 85, 255, 0.13);
+      border-color: #b197fc;
+      color: #6c3483;
+    }
+    #map {
+      flex: 1;
+    }
+    .leaflet-routing-container {
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+    .routing-close {
+      position: absolute;
+      top: 5px;
+      right: 8px;
+      background: #d62828;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      cursor: pointer;
+      z-index: 999;
+    }
+    .spinner {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 6px solid #ccc;
+      border-top: 6px solid #d62828;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      z-index: 1000;
+      display: none;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .marker-label {
+      background: rgba(255,255,255,0.95);
+      color: #3a2e6c;
+      font-weight: 600;
+      border: 1.5px solid #b197fc;
+      border-radius: 8px;
+      padding: 2px 8px;
+      box-shadow: 0 2px 8px rgba(50,50,93,0.08);
+      font-size: 12px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      letter-spacing: 0.01em;
+      margin-bottom: 14px;
+      text-align: center;
+      line-height: 1.2;
+      white-space: pre;
+      pointer-events: none;
+      transition: box-shadow 0.2s;
+    }
+    #routeForm {
+      background: linear-gradient(135deg, #b2f7ef 0%, #43e97b 100%);
+      border-radius: 14px;
+      box-shadow: 0 2px 12px rgba(67, 233, 123, 0.10);
+      padding: 18px 16px 12px 16px;
+      margin-top: 18px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      color: #1b5e20;
+    }
+    #routeForm label {
+      color: #388e3c;
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 2px;
+      margin-top: 0;
+      letter-spacing: 0.01em;
+    }
+    #routeForm select {
+      border: 1.5px solid #43e97b;
+      border-radius: 6px;
+      padding: 7px 10px;
+      font-size: 15px;
+      background: #e8f5e9;
+      color: #1b5e20;
+      margin-bottom: 6px;
+      outline: none;
+      transition: border 0.2s;
+    }
+    #routeForm select:focus {
+      border-color: #388e3c;
+    }
+    #showRouteBtn {
+      background: linear-gradient(90deg, #7a55ff 0%, #b197fc 100%);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 9px 0;
+      margin-top: 6px;
+      cursor: pointer;
+      box-shadow: 0 1px 4px rgba(122, 85, 255, 0.10);
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    #showRouteBtn:hover {
+      background: linear-gradient(90deg, #b197fc 0%, #7a55ff 100%);
+      box-shadow: 0 2px 8px rgba(122, 85, 255, 0.18);
+    }
+    .prepared-by {
+      font-size: 13px;
+      color: #6c3483;
+      font-weight: 700;
+      margin-bottom: 16px;
+      margin-top: -8px;
+      letter-spacing: 0.01em;
+      background: linear-gradient(90deg, #ffe6f7 0%, #e0c3fc 100%);
+      border-radius: 6px;
+      padding: 4px 10px;
+      display: block;
+      box-shadow: 0 1px 4px rgba(122, 85, 255, 0.08);
+      width: fit-content;
+    }
+    .prepared-names {
+      margin-top: 2px;
+      font-size: 13px;
+      color: #6c3483;
+      font-weight: 700;
+      text-align: left;
+      background: none;
+      border-radius: 0;
+      padding: 0;
+      display: block;
+      box-shadow: none;
+      letter-spacing: 0.01em;
+    }
+  </style>
+</head>
+<body>
+  <div id="sidebar">
+    <h3>🇳🇵 Lumbini Tourist Map</h3>
+    <div class="prepared-by">
+      <div>Prepared by:</div>
+      <div class="prepared-names">Arbin Chaudhary, Nitesh Yadav, Bhumika Singh </div>
+    </div>
+    <select id="districtSelect">
+      <option value="All">All District</option>
+      <option value="Rupandehi">Rupandehi</option>
+      <option value="Kapilvastu">Kapilvastu</option>
+      <option value="Parasi">Parasi</option>
+      <option value="Palpa">Palpa</option>
+      <option value="Gulmi">Gulmi</option>
+      <option value="Arghakhanchi">Arghakhanchi</option>
+      <option value="Dang">Dang</option>
+      <option value="Rolpa">Rolpa</option>
+      <option value="Pyuthan">Pyuthan</option>
+      <option value="Bardiya">Bardiya</option>
+      <option value="Banke">Banke</option>
+      <option value="Nawalparasi East">Nawalparasi East</option>
+    </select>
+    <ul id="placeList" style="display:none;"></ul>
+    <div id="routeForm">
+      <label for="fromPlaceSelect" style="margin-top:10px;display:block;">From Place:</label>
+      <select id="fromPlaceSelect" style="margin-bottom:8px;"></select>
+      <label for="toPlaceSelect">To Place:</label>
+      <select id="toPlaceSelect" style="margin-bottom:8px;"></select>
+      <button id="showRouteBtn" style="margin-bottom:15px;">Show Route Between Places</button>
+    </div>
+  </div>
+  <div id="map"></div>
+  <div class="spinner" id="spinner"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  <script>
+    const map = L.map('map').setView([27.5, 83.5], 8);
+    const spinner = document.getElementById('spinner');
+
+    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    const esri = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 19,
+      attribution: 'Tiles © Esri'
+    });
+
+    const topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+      maxZoom: 17,
+      attribution: '© OpenTopoMap contributors'
+    });
+
+    const baseLayers = {
+      'OpenStreetMap': osm,
+      'ESRI Satellite': esri,
+      'Topo Map': topo
+    };
+
+    const geocoder = L.Control.geocoder({
+      defaultMarkGeocode: true
+    }).addTo(map);
+
+    setTimeout(() => {
+      const searchBtn = document.querySelector('.leaflet-control-geocoder-icon');
+      if (searchBtn) {
+        // Add search icon SVG and label
+        searchBtn.innerHTML = `<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' style='vertical-align:middle;margin-right:6px;' fill='none' stroke='#3a2e6c' stroke-width='2' viewBox='0 0 24 24'><circle cx='11' cy='11' r='7'/><line x1='21' y1='21' x2='16.65' y2='16.65'/></svg>Search`;
+        searchBtn.style.fontSize = '15px';
+        searchBtn.style.fontWeight = '600';
+        searchBtn.style.fontFamily = 'inherit';
+        searchBtn.style.background = 'transparent';
+        searchBtn.style.backgroundImage = 'none';
+        searchBtn.style.width = 'auto';
+        searchBtn.style.padding = '0 10px';
+        searchBtn.style.border = 'none';
+        searchBtn.style.boxShadow = 'none';
+        searchBtn.style.color = '#3a2e6c';
+        searchBtn.style.display = 'flex';
+        searchBtn.style.alignItems = 'center';
+        searchBtn.style.gap = '4px';
+        searchBtn.onmouseover = () => { searchBtn.style.opacity = '0.7'; };
+        searchBtn.onmouseout = () => { searchBtn.style.opacity = '1'; };
+      }
+    }, 100);
+
+    const TIA = [27.6971, 85.3596];
+    let touristData;
+    let markersLayer = L.layerGroup().addTo(map);
+    let routingControl;
+    let hotelsLayer = L.layerGroup().addTo(map);
+
+    // Declare overlays layers in top scope
+    let districtsLayer;
+    let statesLayer;
+    let municipalitiesLayer;
+
+    fetch('data/lumbini_places.geojson')
+      .then(res => res.json())
+      .then(data => {
+        touristData = data;
+        showPlaces(touristData.features);
+        populatePlaceDropdowns(touristData.features);
+      });
+
+    function showPlaces(features) {
+      markersLayer.clearLayers();
+      hotelsLayer.clearLayers();
+      const bounds = [];
+
+      features.forEach(f => {
+        const coords = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+        const marker = L.marker(coords).addTo(markersLayer);
+        // Show name as a permanent tooltip
+        marker.bindTooltip(f.properties.name, {permanent: true, direction: 'top', className: 'marker-label'});
+        const popupContent = document.createElement('div');
+        popupContent.innerHTML = `
+          <b>${f.properties.name}</b><br>
+          <b>Type:</b> ${f.properties.type}<br>
+          <b>District:</b> ${f.properties.district}<br>
+          <b>Info:</b> ${f.properties.info}<br>
+        `;
+        // Add image if available
+        const imageUrl = f.properties.image || f.properties.image_source;
+        if (imageUrl) {
+          const img = document.createElement('img');
+          img.src = imageUrl;
+          img.alt = f.properties.name;
+          img.style.maxWidth = '220px';
+          img.style.marginTop = '8px';
+          img.style.display = 'block';
+          popupContent.appendChild(img);
+        }
+
+        const routeBtn = document.createElement('button');
+        routeBtn.textContent = 'Show Route from TIA';
+        routeBtn.style.marginTop = '8px';
+        routeBtn.onclick = () => {
+          showRoute(coords);
+          // Close the popup so only the route is visible
+          marker.closePopup();
+        };
+        popupContent.appendChild(routeBtn);
+
+        // Buffer button
+        const bufferBtn = document.createElement('button');
+        bufferBtn.textContent = 'Show Buffer (5 km)';
+        bufferBtn.style.margin = '8px 0 0 0';
+        popupContent.appendChild(bufferBtn);
+        bufferBtn.onclick = () => {
+          // Remove previous buffer if exists
+          if (window._bufferLayer) {
+            map.removeLayer(window._bufferLayer);
+            window._bufferLayer = null;
+          }
+          // Use turf global (should be available with correct script)
+          try {
+            const buffer = turf.buffer(turf.point(f.geometry.coordinates), 5, { units: 'kilometers' });
+            window._bufferLayer = L.geoJSON(buffer, {
+              style: { color: '#1976d2', weight: 2, fillColor: '#90caf9', fillOpacity: 0.25 }
+            }).addTo(map);
+            map.fitBounds(window._bufferLayer.getBounds(), { maxZoom: 14 });
+            marker.closePopup();
+          } catch (err) {
+            console.error('Buffer error:', err);
+            alert('Could not draw buffer. See console for details.');
+          }
+        };
+        // Clear Buffer button
+        const clearBufferBtn = document.createElement('button');
+        clearBufferBtn.textContent = 'Clear Buffer';
+        clearBufferBtn.style.margin = '6px 0 0 0';
+        popupContent.appendChild(clearBufferBtn);
+        clearBufferBtn.onclick = () => {
+          if (window._bufferLayer) {
+            map.removeLayer(window._bufferLayer);
+            window._bufferLayer = null;
+          }
+          marker.closePopup();
+        };
+
+        marker.bindPopup(popupContent);
+        bounds.push(coords);
+      });
+
+      if (bounds.length) map.fitBounds(bounds);
+    }
+
+    function showRoute(destination) {
+      if (routingControl) map.removeControl(routingControl);
+      spinner.style.display = 'block';
+
+      // Hide all markers while showing the route
+      map.removeLayer(markersLayer);
+
+      routingControl = L.Routing.control({
+        waypoints: [L.latLng(TIA), L.latLng(destination)],
+        routeWhileDragging: false,
+        show: true,
+        addWaypoints: false,
+        lineOptions: {
+          styles: [
+            {color: 'red', weight: 9, opacity: 1},
+            {color: 'yellow', weight: 5, opacity: 1}
+          ]
+        }
+      }).addTo(map);
+
+      routingControl.on('routesfound', () => {
+        spinner.style.display = 'none';
+      });
+
+      setTimeout(() => {
+        const container = document.querySelector('.leaflet-routing-container');
+        if (container && !container.querySelector('.routing-close')) {
+          const closeBtn = document.createElement('button');
+          closeBtn.textContent = '×';
+          closeBtn.className = 'routing-close';
+          closeBtn.onclick = () => {
+            map.removeControl(routingControl);
+            // Show all markers again when route is closed
+            if (!map.hasLayer(markersLayer)) {
+              map.addLayer(markersLayer);
+            }
+          };
+          container.appendChild(closeBtn);
+        }
+      }, 1000);
+    }
+
+    document.getElementById('districtSelect').addEventListener('change', function () {
+      const selected = this.value;
+      const placeList = document.getElementById('placeList');
+      if (selected === 'All') {
+        showPlaces(touristData.features);
+        placeList.style.display = 'none';
+        placeList.innerHTML = '';
+      } else {
+        const filtered = touristData.features.filter(f => f.properties.district === selected);
+        showPlaces(filtered);
+        // Show and populate the place list
+        placeList.style.display = '';
+        placeList.innerHTML = '';
+        filtered.forEach(f => {
+          const li = document.createElement('li');
+          li.textContent = f.properties.name;
+          li.onclick = () => {
+            const coords = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+            map.setView(coords, 14);
+            // Find the marker for this place and open its popup
+            markersLayer.eachLayer(marker => {
+              if (marker.getLatLng().lat === coords[0] && marker.getLatLng().lng === coords[1]) {
+                marker.openPopup();
+              }
+            });
+          };
+          placeList.appendChild(li);
+        });
+      }
+    });
+    // Function to style district boundaries
+function styleDistrict(feature) {
+  return {
+    color: "#3388ff",
+    weight: 2,
+    fill: false
+  };
+}
+
+// Function to style state boundaries
+function styleState(feature) {
+  return {
+    color: "#ff7800",
+    weight: 3,
+    fill: false
+  };
+}
+
+// Add Nepal Municipalities boundaries
+function styleMunicipality(feature) {
+  return {
+    color: '#009688',
+    weight: 1.5,
+    fill: false,
+    dashArray: '3, 6'
+  };
+}
+
+fetch('data/nepal-municipalities.geojson')
+  .then(res => res.json())
+  .then(data => {
+    municipalitiesLayer = L.geoJSON(data, {
+      style: styleMunicipality
+    });
+    // Add to overlays control if already initialized
+    if (districtsLayer && statesLayer) addOverlaysControl();
+  });
+
+// Add Nepal Districts boundaries
+fetch('data/nepal-districts-new.geojson')
+  .then(res => res.json())
+  .then(data => {
+    districtsLayer = L.geoJSON(data, {
+      style: styleDistrict
+    }).addTo(map);
+    // After both layers are loaded, add overlays control if statesLayer is also loaded
+    if (statesLayer) addOverlaysControl();
+  });
+
+// Add Nepal States boundaries
+fetch('data/nepal-states.geojson')
+  .then(res => res.json())
+  .then(data => {
+    statesLayer = L.geoJSON(data, {
+      style: styleState
+    }).addTo(map);
+    // After both layers are loaded, add overlays control if districtsLayer is also loaded
+    if (districtsLayer) addOverlaysControl();
+  });
+
+// Add overlays control after both layers are loaded
+function addOverlaysControl() {
+  const overlays = {
+    "District Boundaries": districtsLayer,
+    "State Boundaries": statesLayer,
+    "Municipalities": municipalitiesLayer
+  };
+  L.control.layers(baseLayers, overlays).addTo(map);
+}
+
+    // Add after geocoder initialization
+    let searchMarker;
+    geocoder.on('markgeocode', function(e) {
+      // Remove previous search marker if exists
+      if (searchMarker) {
+        map.removeLayer(searchMarker);
+      }
+      const center = e.geocode.center;
+      searchMarker = L.marker(center).addTo(map);
+      // Use the geocode name or address as label
+      const label = e.geocode.name || e.geocode.html || 'Search Result';
+      searchMarker.bindTooltip(label, {permanent: true, direction: 'top', className: 'marker-label'}).openTooltip();
+      map.setView(center, 14);
+    });
+
+    // Populate the From/To dropdowns with all places
+    function populatePlaceDropdowns(features) {
+      const fromSelect = document.getElementById('fromPlaceSelect');
+      const toSelect = document.getElementById('toPlaceSelect');
+      fromSelect.innerHTML = '<option value="">Select Place</option>';
+      toSelect.innerHTML = '<option value="">Select Place</option>';
+      features.forEach((f, i) => {
+        const name = f.properties.name + ' (' + f.properties.district + ')';
+        const optFrom = document.createElement('option');
+        optFrom.value = i;
+        optFrom.textContent = name;
+        fromSelect.appendChild(optFrom);
+        const optTo = document.createElement('option');
+        optTo.value = i;
+        optTo.textContent = name;
+        toSelect.appendChild(optTo);
+      });
+    }
+
+    // Show route between selected places
+    document.getElementById('showRouteBtn').onclick = function() {
+      const fromIdx = document.getElementById('fromPlaceSelect').value;
+      const toIdx = document.getElementById('toPlaceSelect').value;
+      if (fromIdx === '' || toIdx === '' || fromIdx === toIdx) {
+        alert('Please select two different places.');
+        return;
+      }
+      const fromFeature = touristData.features[fromIdx];
+      const toFeature = touristData.features[toIdx];
+      const fromCoords = [fromFeature.geometry.coordinates[1], fromFeature.geometry.coordinates[0]];
+      const toCoords = [toFeature.geometry.coordinates[1], toFeature.geometry.coordinates[0]];
+      // Remove previous routing control if exists
+      if (routingControl) map.removeControl(routingControl);
+      // Hide all markers while showing the route
+      map.removeLayer(markersLayer);
+      routingControl = L.Routing.control({
+        waypoints: [L.latLng(fromCoords), L.latLng(toCoords)],
+        routeWhileDragging: false,
+        show: true,
+        addWaypoints: false,
+        lineOptions: {
+          styles: [
+            {color: 'red', weight: 9, opacity: 1},
+            {color: 'yellow', weight: 5, opacity: 1}
+          ]
+        }
+      }).addTo(map);
+      setTimeout(() => {
+        const container = document.querySelector('.leaflet-routing-container');
+        if (container && !container.querySelector('.routing-close')) {
+          const closeBtn = document.createElement('button');
+          closeBtn.textContent = '×';
+          closeBtn.className = 'routing-close';
+          closeBtn.onclick = () => {
+            map.removeControl(routingControl);
+            if (!map.hasLayer(markersLayer)) {
+              map.addLayer(markersLayer);
+            }
+          };
+          container.appendChild(closeBtn);
+        }
+      }, 1000);
+    };
+
+    // Add Clear Route button below the route form
+    const clearRouteBtn = document.createElement('button');
+    clearRouteBtn.textContent = 'Clear Route';
+    clearRouteBtn.id = 'clearRouteBtn';
+    clearRouteBtn.style.margin = '0 0 10px 0';
+    clearRouteBtn.style.background = 'linear-gradient(90deg, #ff6b6b 0%, #ffd6e0 100%)';
+    clearRouteBtn.style.color = '#fff';
+    clearRouteBtn.style.border = 'none';
+    clearRouteBtn.style.borderRadius = '6px';
+    clearRouteBtn.style.fontSize = '15px';
+    clearRouteBtn.style.fontWeight = '700';
+    clearRouteBtn.style.padding = '9px 0';
+    clearRouteBtn.style.cursor = 'pointer';
+    clearRouteBtn.style.boxShadow = '0 1px 4px rgba(255, 107, 107, 0.10)';
+    clearRouteBtn.style.transition = 'background 0.2s, box-shadow 0.2s';
+    clearRouteBtn.onmouseover = () => {
+      clearRouteBtn.style.background = 'linear-gradient(90deg, #ffd6e0 0%, #ff6b6b 100%)';
+      clearRouteBtn.style.boxShadow = '0 2px 8px rgba(255, 107, 107, 0.18)';
+    };
+    clearRouteBtn.onmouseout = () => {
+      clearRouteBtn.style.background = 'linear-gradient(90deg, #ff6b6b 0%, #ffd6e0 100%)';
+      clearRouteBtn.style.boxShadow = '0 1px 4px rgba(255, 107, 107, 0.10)';
+    };
+    document.getElementById('routeForm').appendChild(clearRouteBtn);
+
+    clearRouteBtn.onclick = function() {
+      if (routingControl) {
+        map.removeControl(routingControl);
+        routingControl = null;
+      }
+      if (!map.hasLayer(markersLayer)) {
+        map.addLayer(markersLayer);
+      }
+    };
+  </script>
+</body>
+</html>
